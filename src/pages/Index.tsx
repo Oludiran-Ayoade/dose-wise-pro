@@ -13,7 +13,8 @@ interface TestCase {
 
 interface Problem {
   title: string;
-  description: string;
+  description?: string; // backward compatibility
+  readme?: string; // new format
   baseCode: string;
   solution: string;
   testCases: TestCase[];
