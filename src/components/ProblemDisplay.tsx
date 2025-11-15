@@ -13,7 +13,8 @@ interface TestCase {
 
 interface Problem {
   title: string;
-  description: string;
+  description?: string; // backward compatibility
+  readme?: string; // new format
   baseCode: string;
   solution: string;
   testCases: TestCase[];
@@ -25,6 +26,9 @@ interface ProblemDisplayProps {
 
 export const ProblemDisplay = ({ problem }: ProblemDisplayProps) => {
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
+  
+  // Support both old and new format
+  const readmeContent = problem.readme || problem.description || "";
 
   const handleCopy = async (text: string, section: string) => {
     try {
@@ -83,7 +87,7 @@ export const ProblemDisplay = ({ problem }: ProblemDisplayProps) => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handleCopy(problem.description, "readme")}
+                  onClick={() => handleCopy(readmeContent, "readme")}
                   className="gap-2"
                 >
                   {copiedSection === "readme" ? (
@@ -96,7 +100,7 @@ export const ProblemDisplay = ({ problem }: ProblemDisplayProps) => {
               </div>
               <div className="prose prose-sm max-w-none">
                 <pre className="whitespace-pre-wrap rounded-lg bg-code-bg border border-code-border p-4 text-sm text-foreground font-mono">
-                  {problem.description}
+                  {readmeContent}
                 </pre>
               </div>
             </TabsContent>
